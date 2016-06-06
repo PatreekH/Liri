@@ -2,6 +2,7 @@ var keys = require('./keys.js');
 var Twitter = require('twitter');
 var spotify = require('spotify');
 var request = require('request');
+var fs = require('fs');
 
 var command = process.argv[2];
 
@@ -16,7 +17,7 @@ switch(command){
 		movieInfo();
 		break;
 	case 'do-what-it-says':
-		//function
+		doThis();
 		break;
 }
 
@@ -61,21 +62,17 @@ function songSearch(){
         	console.log('Error occurred: ' + err);
         	return;
     	}
-   		console.log('========== Spotify Song Info: ==========');
     	var artistName = data.tracks.items[0].artists[0].name;
     	var songName = data.tracks.items[0].name;
     	var previewLink = data.tracks.items[0].preview_url;
     	var albumName = data.tracks.items[0].album.name;
-
-    	//var tweetDate = tweets[i].created_at;
+   		console.log('========== Spotify Song Info: ==========');
     	console.log(' ')
     	console.log("Artist name: " + artistName);
     	console.log("Song name: " + songName);
     	console.log("Preview Link: " + previewLink);
     	console.log("Album Name: " + albumName);
-    	//console.log(data.tracks.items[0]);
     	console.log(' ')
-    	//console.log(data);
     	console.log('========================================');
 	});
 
@@ -104,8 +101,28 @@ function movieInfo(){
 		console.log(' ');
 		console.log('=================================');
 	})
-
-
-
-
 }
+
+//--Does not work yet--
+function doThis(){
+	fs.readFile('random.txt', 'utf8', function (err,data) {
+  		if (err) {
+   			return console.log(err);
+  		}
+  			var args = data.split(',');
+  			//console.log(args);
+  			//console.log(args[0]);
+  			//console.log(args[1]);
+  			var action = args[0];
+  			var value = args[1]; 
+  			runDoThis(action, value);
+  			//process.argv[3] = args[1];
+	});
+}
+
+//var runDoThis = function(){
+
+//}
+
+
+
