@@ -41,8 +41,11 @@ function tweets(){
 
 function songSearch(){
 
-	var song = "what's my age again" 
-	//process.argv[3];
+	var song = process.argv[3];
+
+	if(song == null){
+		song = "What's My Age Again";
+	}
 
 	spotify.search({ type: 'track', query: song }, function(err, data) {
     	if ( err ) {
@@ -50,7 +53,7 @@ function songSearch(){
         	return;
     	}
    		console.log('========== Spotify Song Info: ==========');
-    	var artistName = data.tracks.items[0].artists.name;
+    	var artistName = data.tracks.items[0].artists[0].name;
     	var songName = data.tracks.items[0].name;
     	var previewLink = data.tracks.items[0].preview_url;
     	var albumName = data.tracks.items[0].album.name;
