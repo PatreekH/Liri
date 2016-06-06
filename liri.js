@@ -1,6 +1,7 @@
 var keys = require('./keys.js');
 var Twitter = require('twitter');
 var spotify = require('spotify');
+var request = require('request');
 
 var command = process.argv[2];
 
@@ -12,7 +13,7 @@ switch(command){
 		songSearch();
 		break;
 	case 'movie-this':
-		//movieInfo();
+		movieInfo();
 		break;
 	case 'do-what-it-says':
 		//function
@@ -25,13 +26,19 @@ function tweets(){
 		client.get('statuses/user_timeline', params, function(error, tweets, response){
   			if (!error) {
   				console.log('========== Twitter Info: ==========');
+  				console.log(' ')
   				for (i = 0; i < 20; i++){
     				var tweetText = tweets[i].text;
     				var tweetDate = tweets[i].created_at;
-    				console.log('-----------Tweet ' + i + '-----------')
+    					console.log('----------- Tweet ' + i + ' -----------');
     				console.log(tweetText);
-    				console.log(tweetDate)
-    				console.log('------------------------------')
+    				console.log(tweetDate);
+    				if (i < 9){
+    					console.log('-------------------------------');
+    				} else {
+    					console.log('--------------------------------');
+    				}
+    				console.log(' ');
     			}
     			console.log('===================================');
   			}
@@ -69,5 +76,34 @@ function songSearch(){
     	//console.log(data);
     	console.log('========================================');
 	});
+
+}
+
+function movieInfo(){
+
+	var args = process.argv.slice(3);
+	var movie = args.join(" ");
+
+	var url = 'http://www.omdbapi.com/?t=' + movie + '&y=&plot=short&r=json'
+
+	request(url, function(err, response, body){
+		var body = JSON.parse(body);
+		console.log('========== Movie Info: ==========');
+		console.log(' ');
+		console.log("Movie Title: " + body.Title);
+		console.log("Year Released: " + body.Year);
+		console.log("IMDB Rating: " + body.imbdRating);
+		console.log("Country: " + body.Country);
+		console.log("Language: " + body.Language);
+		console.log("Plot: " + body.Plot);
+		console.log("Actors: " + body.Actors);
+		//console.log("Rotten Tomatoes Rating: " + body);
+		//console.log("Rotten Tomatoes Url: " + body);
+		console.log(' ');
+		console.log('=================================');
+	})
+
+
+
 
 }
