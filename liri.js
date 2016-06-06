@@ -21,6 +21,7 @@ switch(command){
 }
 
 function tweets(){
+	var y = 0;
 	var client = new Twitter(keys.twitterKeys)
 	var params = {screen_name: 'RpatrkH'};
 		client.get('statuses/user_timeline', params, function(error, tweets, response){
@@ -28,9 +29,10 @@ function tweets(){
   				console.log('========== Twitter Info: ==========');
   				console.log(' ')
   				for (i = 0; i < 20; i++){
+  					y++;
     				var tweetText = tweets[i].text;
     				var tweetDate = tweets[i].created_at;
-    					console.log('----------- Tweet ' + i + ' -----------');
+    					console.log('----------- Tweet ' + y + ' -----------');
     				console.log(tweetText);
     				console.log(tweetDate);
     				if (i < 9){
