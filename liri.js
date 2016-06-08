@@ -29,6 +29,7 @@ function tweets(){
   			if (!error) {
   				console.log('========== Twitter Info: ==========');
   				console.log(' ')
+  				//console.log(tweets);
   				for (i = 0; i < 20; i++){
   					y++;
     				var tweetText = tweets[i].text;
@@ -44,7 +45,9 @@ function tweets(){
     				console.log(' ');
     			}
     			console.log('===================================');
-  			}
+  			} else {
+          console.log('Error');
+        }
 	});
 }
 
@@ -114,8 +117,9 @@ function doThis(){
   			//console.log(args[0]);
   			//console.log(args[1]);
   			var action = args[0];
-  			var value = args[1]; 
-  			runDoThis(action, value);
+  			var value = args[1];
+  			console.log(action + ' ' + value); 
+  			//runDoThis(action, value);
   			//process.argv[3] = args[1];
 	});
 }
