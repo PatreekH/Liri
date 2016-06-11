@@ -5,21 +5,26 @@ var request = require('request');
 var fs = require('fs');
 
 var command = process.argv[2];
+var logResult;
 
-switch(command){
-	case 'my-tweets':
-		tweets();
-		break;
-	case 'spotify-this-song':
-		songSearch();
-		break;
-	case 'movie-this':
-		movieInfo();
-		break;
-	case 'do-what-it-says':
-		doThis();
-		break;
+var userPick = function(){
+  switch(command){
+    case 'my-tweets':
+      tweets();
+      break;
+    case 'spotify-this-song':
+      songSearch();
+      break;
+    case 'movie-this':
+      movieInfo();
+      break;
+    case 'do-what-it-says':
+      doThis();
+      break;
+  }
 }
+
+userPick();
 
 function tweets(){
 	var y = 0;
@@ -43,6 +48,8 @@ function tweets(){
     					console.log('--------------------------------');
     				}
     				console.log(' ');
+            logResult = "  " + "Tweet " + y + ": " + tweets[i].text + "  Time:" + tweets[i].user.created_at + "  ";
+            logData(logResult);
     			}
     			console.log('===================================');
   			} else {
@@ -77,8 +84,11 @@ function songSearch(){
     	console.log("Album Name: " + albumName);
     	console.log(' ')
     	console.log('========================================');
-	});
 
+      logResult = "***Start of Entry***" + "  " + "Artist Name: " + data.tracks.items[0].artists[0].name + "  " + "Track Name: " + data.tracks.items[0].name + "  " + "Preview URL: " + data.tracks.items[0].preview_url + "  " + "Album Name: " + data.tracks.items[0].album.name + "  " + "***End of Entry***" + "  ";
+      logData(logResult);
+
+	});
 }
 
 function movieInfo(){
@@ -86,7 +96,7 @@ function movieInfo(){
 	var args = process.argv.slice(3);
 	var movie = args.join(" ");
 
-	var url = 'http://www.omdbapi.com/?t=' + movie + '&y=&plot=short&r=json'
+	var url = 'http://www.omdbapi.com/?t=' + movie + '&y=&plot=short&r=json&tomatoes=true'
 
 	request(url, function(err, response, body){
 		var body = JSON.parse(body);
@@ -99,34 +109,31 @@ function movieInfo(){
 		console.log("Language: " + body.Language);
 		console.log("Plot: " + body.Plot);
 		console.log("Actors: " + body.Actors);
-		//console.log("Rotten Tomatoes Rating: " + body);
-		//console.log("Rotten Tomatoes Url: " + body);
+		console.log("Rotten Tomatoes Rating: " + body.tomatoUserRating);
+		console.log("Rotten Tomatoes Url: " + body.tomatoURL);
 		console.log(' ');
 		console.log('=================================');
+
+    logResult = "***Start of Entry***" + "  " + "Title: " + body.Title + "  " + "Year Released: " + body.Year + "  " + "IMDB Rating: " + body.imdbRating + "  " + "Country: " + body.Country + "  " + "Language: " + body.Language + "  " + "Plot: " + body.Plot + "  " + "Actors: " + body.Actors + "  " + "Rotten Tomatoes Rating: " + body.tomatoRating + "  " + "Rotten Tomatoes Link: " + body.tomatoURL + "  " + "***End of Entry***" + "  ";
+    logData(logResult);
 	})
 }
 
-//--Does not work yet--
 function doThis(){
 	fs.readFile('random.txt', 'utf8', function (err,data) {
   		if (err) {
    			return console.log(err);
-  		}
-  			var args = data.split(',');
-  			//console.log(args);
-  			//console.log(args[0]);
-  			//console.log(args[1]);
-  			var action = args[0];
-  			var value = args[1];
-  			console.log(action + ' ' + value); 
-  			//runDoThis(action, value);
-  			//process.argv[3] = args[1];
+  		} else {
+        var args = data.split(',');
+        var action = args[0];
+        var value = args[1];
+        command = action;
+        process.argv[3] = value;
+        userPick();
+      }
 	});
 }
 
-//var runDoThis = function(){
-
-//}
 
 
 
