@@ -134,6 +134,12 @@ function doThis(){
 	});
 }
 
-
+function logData(dataToAppend) {
+    fs.appendFile('log.txt', dataToAppend, (err) => {
+        if (err) {
+            return console.log(err)
+        }
+    });
+};
 
 
